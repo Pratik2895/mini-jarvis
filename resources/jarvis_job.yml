@@ -1,0 +1,43 @@
+﻿# Setup job — builds the full JARVIS pipeline on Databricks Serverless
+# DAG: create_schema → create_uc_functions → log_register_agent → deploy_agent
+resources:
+  jobs:
+    jarvis_setup_job:
+      name: "[${bundle.target}] Mini JARVIS Setup"
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+        - name: llm_endpoint
+          default: ${var.llm_endpoint}
+        - name: agent_endpoint
+          default: ${var.agent_endpoint}
+        - name: model_name
+          default: ${var.model_name}
+
+      tasks:
+        - task_key: create_schema
+          notebook_task:
+            notebook_path: ../src/notebooks/01_create_uc_schema.py
+
+        - task_key: create_uc_functions
+          depends_on:
+            - task_key: create_schema
+          notebook_task:
+            notebook_path: ../src/notebooks/02_create_uc_functions.py
+
+        - task_key: log_register_agent
+          depends_on:
+            - task_key: create_uc_functions
+          notebook_task:
+            notebook_path: ../src/notebooks/03_log_register_agent.py
+
+        - task_key: deploy_agent
+          depends_on:
+            - task_key: log_register_agent
+          notebook_task:
+            notebook_path: ../src/notebooks/04_deploy_agent.py
+
+      queue:
+        enabled: true

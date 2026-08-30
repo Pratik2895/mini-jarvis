@@ -1,0 +1,13 @@
+﻿# Databricks App — Gradio chat UI served directly from GitHub
+resources:
+  apps:
+    jarvis_app:
+      name: ${var.app_name}
+      git_repository:
+        provider: gitHub
+        url: https://github.com/Pratik2895/mini-jarvis.git
+      git_source:
+        branch: main
+        source_code_path: src/app
+      user_api_scopes:
+        - model-serving

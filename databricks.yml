@@ -1,0 +1,50 @@
+# Databricks Asset Bundle: Mini JARVIS
+#
+# Architecture:
+#   Gemini External Model Endpoint (OpenAI-compat via Google AI)
+#   UC Functions (tools: time, weather, reminder, calculate)
+#   Gemini Tool-Calling Agent ? MLflow PyFunc ? Model Serving endpoint
+#   Databricks App (Gradio UI + REST)
+
+bundle:
+  name: mini-jarvis
+  engine: direct
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog.
+    default: agentic_catalog
+  schema:
+    description: Schema inside the catalog.
+    default: mini_jarvis
+  llm_endpoint:
+    description: Gemini external model endpoint name.
+    default: gemini-2-flash-endpoint
+  agent_endpoint:
+    description: Model Serving endpoint for the deployed JARVIS agent.
+    default: mini-jarvis-agent-endpoint
+  model_name:
+    description: Fully-qualified UC model name for the registered agent.
+    default: ${var.catalog}.${var.schema}.jarvis_agent
+  app_name:
+    description: Databricks App name.
+    default: mini-jarvis-app
+
+targets:
+  dev:
+    mode: development
+    default: true
+    presets:
+      name_prefix: ""
+    workspace:
+      profile: dev-52d59088
+
+  prod:
+    mode: production
+    workspace:
+      profile: dev-52d59088
+    variables:
+      schema: mini_jarvis_prod
