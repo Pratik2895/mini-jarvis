@@ -117,7 +117,8 @@ def process_user_interaction(user_text, audio_path, history, enable_voice):
 
     # Query the brain
     response = brain.chat(prompt)
-    history.append((prompt, response))
+    history.append({"role": "user", "content": prompt})
+    history.append({"role": "assistant", "content": response})
 
     # Generate speech audio if enabled
     audio_output = None
