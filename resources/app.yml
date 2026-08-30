@@ -1,4 +1,4 @@
-﻿# Databricks App — Gradio chat UI served directly from GitHub
+# Databricks App — Gradio chat UI served directly from GitHub
 resources:
   apps:
     jarvis_app:

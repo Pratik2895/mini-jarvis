@@ -1,16 +1,8 @@
-# External model endpoint — proxies Gemini 2.0 Flash via Google AI (OpenAI-compat API)
-# API key is read from Databricks Secrets at runtime (never in code)
-resources:
-  serving_endpoints:
-    gemini_endpoint:
-      name: ${var.llm_endpoint}
-      config:
-        served_entities:
-          - name: gemini-2-flash
-            external_model:
-              name: gemini-3.6-flash
-              provider: openai
-              task: llm/v1/chat
-              openai_config:
-                openai_api_key: "{{secrets/mini-jarvis/GEMINI_API_KEY}}"
-                openai_api_base: "https://generativelanguage.googleapis.com/v1beta/openai/"
+# NOTE: The Gemini External Model endpoint is created programmatically in
+# src/notebooks/01_create_uc_schema.py using the Databricks SDK.
+# This file is kept as documentation of the endpoint configuration.
+#
+# Endpoint name: gemini-3.6-flash-endpoint
+# Provider: openai (OpenAI-compat pointing to Google AI)
+# Base URL: https://generativelanguage.googleapis.com/v1beta/openai/
+# API Key: {{secrets/mini-jarvis/GEMINI_API_KEY}}

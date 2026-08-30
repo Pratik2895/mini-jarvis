@@ -1,4 +1,4 @@
-﻿# Setup job — builds the full JARVIS pipeline on Databricks Serverless
+# Setup job — builds the full JARVIS pipeline on Databricks Serverless
 # DAG: create_schema → create_uc_functions → log_register_agent → deploy_agent
 resources:
   jobs:
