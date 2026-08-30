@@ -1,4 +1,4 @@
-﻿"""client/text_to_speech.py — Offline TTS using pyttsx3."""
+"""client/text_to_speech.py — Offline TTS using pyttsx3."""
 from __future__ import annotations
 
 import os
@@ -36,3 +36,12 @@ def speak_async(text: str) -> None:
     """Non-blocking speak — fires in the background."""
     import threading
     threading.Thread(target=speak, args=(text,), daemon=True).start()
+
+
+def text_to_wav(text: str, output_path: str) -> str:
+    """Synthesize text into a WAV file for browser/audio playback."""
+    engine = _get_engine()
+    engine.save_to_file(text, output_path)
+    engine.runAndWait()
+    return output_path
+

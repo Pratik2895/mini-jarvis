@@ -1,4 +1,4 @@
-﻿"""app/brain.py — Gemini-powered tool-calling agent using google-genai SDK."""
+"""app/brain.py — Gemini-powered tool-calling agent using google-genai SDK."""
 from __future__ import annotations
 
 import os
@@ -52,6 +52,7 @@ class JarvisBrain:
     def __init__(self):
         self._history: list[types.Content] = []
         self._tools = _build_tool_config()
+        self.tool_log: list[dict] = []  # [{timestamp, tool, args, result}]
 
     def chat(self, user_message: str) -> str:
         """Send a message and return JARVIS response (handles tool calls internally)."""
@@ -91,9 +92,17 @@ class JarvisBrain:
 
             # Execute tools and push results back as a user turn
             tool_parts = []
+            import datetime
             for fc in fn_calls:
                 args = dict(fc.args) if fc.args else {}
                 result = dispatch(fc.name, args)
+                timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+                self.tool_log.append({
+                    "timestamp": timestamp,
+                    "tool": fc.name,
+                    "args": args,
+                    "result": result,
+                })
                 print(f"  [tool] {fc.name}({args}) -> {result}")
                 tool_parts.append(
                     types.Part(
@@ -112,6 +121,7 @@ class JarvisBrain:
 
     def reset(self):
         self._history = []
+        self.tool_log = []
 
 
 def run_cli():

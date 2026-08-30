@@ -1,4 +1,4 @@
-﻿"""client/jarvis_client.py — Local voice loop.
+"""client/jarvis_client.py — Local voice loop.
 
 Pipeline:
   Microphone → sounddevice → WAV buffer
@@ -17,8 +17,16 @@ from __future__ import annotations
 
 import io
 import os
+import sys
 import time
 import wave
+from pathlib import Path
+
+# Ensure project root is on sys.path so `client.*` imports resolve
+# when running: python client/jarvis_client.py
+_project_root = str(Path(__file__).resolve().parent.parent)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
 import numpy as np
 import requests
